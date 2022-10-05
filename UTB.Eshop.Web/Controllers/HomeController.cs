@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using UTB.Eshop.Web.Models;
+using UTB.Eshop.Web.Models.Database;
+using UTB.Eshop.Web.Models.Entities;
 
 namespace UTB.Eshop.Web.Controllers
 {
@@ -20,7 +22,8 @@ namespace UTB.Eshop.Web.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            List<CarouselItem> carouselItems = DatabaseFake.CarouselItems;
+            return View(carouselItems);
         }
 
         public IActionResult Privacy()
