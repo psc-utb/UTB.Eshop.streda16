@@ -1,6 +1,28 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+.parallax {
+    /* The image used */
+    background-image: url("/img/parallax/header-it-f22.jpg");
+    /* Set a specific height */
+    min-height: 100%;
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.no-parallax {
+    background-color: white;
+    /* Set a specific height (viewport height)*/
+    min-height: 85vh;
+}
+
+.no-parallax-footer {
+    background-color: white;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;

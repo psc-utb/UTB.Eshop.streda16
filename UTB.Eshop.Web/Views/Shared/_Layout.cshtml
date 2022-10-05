@@ -29,13 +29,16 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    <div class="parallax">
+        <div class="container no-parallax">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted no-parallax-footer">
         <div class="container">
             &copy; 2022 - UTB.Eshop.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
