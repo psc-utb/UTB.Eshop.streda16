@@ -29,7 +29,7 @@
                             <td>@carouselItem.ImageSrc</td>
                             <td>@carouselItem.ImageAlt</td>
                             <td><a asp-action="Edit" asp-route-ID="@carouselItem.ID">Edit</a></td>
-                            <td><a asp-action="Delete" asp-route-ID="@carouselItem.ID">Delete</a></td>
+                            <td><a asp-action="Delete" asp-route-ID="@carouselItem.ID" onclick="return ConfirmDelete();">Delete</a></td>
                         </tr>
                     }
                 }
@@ -41,4 +41,10 @@
     {
           <h2>Tabulka Carousel je prázdná</h2>
     }
+}
+
+
+@section Scripts
+{
+    <script src="~/js/dialogs.js"></script>
 }
