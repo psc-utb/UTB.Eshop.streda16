@@ -14,15 +14,16 @@ namespace UTB.Eshop.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        readonly EshopDbContext _eshopDbContext;
+        public HomeController(ILogger<HomeController> logger, EshopDbContext eshopDbContext)
         {
             _logger = logger;
+            _eshopDbContext = eshopDbContext;
         }
 
         public IActionResult Index()
         {
-            List<CarouselItem> carouselItems = DatabaseFake.CarouselItems;
+            List<CarouselItem> carouselItems = _eshopDbContext.CarouselItems.ToList();
             return View(carouselItems);
         }
 

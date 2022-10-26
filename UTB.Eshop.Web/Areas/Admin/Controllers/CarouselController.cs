@@ -11,9 +11,15 @@ namespace UTB.Eshop.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class CarouselController : Controller
     {
+        readonly EshopDbContext _eshopDbContext;
+        public CarouselController(EshopDbContext eshopDbContext)
+        {
+            _eshopDbContext = eshopDbContext;
+        }
+
         public IActionResult Select()
         {
-            List<CarouselItem> carouselItems = DatabaseFake.CarouselItems;
+            List<CarouselItem> carouselItems = _eshopDbContext.CarouselItems.ToList();
             return View(carouselItems);
         }
 
@@ -25,20 +31,14 @@ namespace UTB.Eshop.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(CarouselItem carouselItem)
         {
-            if (DatabaseFake.CarouselItems.Count > 0)
-            {
-                carouselItem.ID = DatabaseFake.CarouselItems.Last().ID + 1;
-            }
-            else
-                carouselItem.ID = 1;
-
-            DatabaseFake.CarouselItems.Add(carouselItem);
+            _eshopDbContext.CarouselItems.Add(carouselItem);
+            _eshopDbContext.SaveChanges();
             return RedirectToAction(nameof(Select));
         }
 
         public IActionResult Edit(int ID)
         {
-            CarouselItem carouselItem = DatabaseFake.CarouselItems.FirstOrDefault(carItem => carItem.ID == ID);
+            CarouselItem carouselItem = _eshopDbContext.CarouselItems.FirstOrDefault(carItem => carItem.ID == ID);
 
             if (carouselItem != null)
             {
@@ -51,12 +51,14 @@ namespace UTB.Eshop.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(CarouselItem carouselItemFromForm)
         {
-            CarouselItem carouselItem = DatabaseFake.CarouselItems.FirstOrDefault(carItem => carItem.ID == carouselItemFromForm.ID);
+            CarouselItem carouselItem = _eshopDbContext.CarouselItems.FirstOrDefault(carItem => carItem.ID == carouselItemFromForm.ID);
 
             if (carouselItem != null)
             {
                 carouselItem.ImageSrc = carouselItemFromForm.ImageSrc;
                 carouselItem.ImageAlt = carouselItemFromForm.ImageAlt;
+                
+                _eshopDbContext.SaveChanges();
 
                 return RedirectToAction(nameof(Select));
             }
@@ -66,11 +68,13 @@ namespace UTB.Eshop.Web.Areas.Admin.Controllers
 
         public IActionResult Delete(int ID)
         {
-            CarouselItem carouselItem = DatabaseFake.CarouselItems.FirstOrDefault(carItem => carItem.ID == ID);
+            CarouselItem carouselItem = _eshopDbContext.CarouselItems.FirstOrDefault(carItem => carItem.ID == ID);
         
             if (carouselItem != null)
             {
-                DatabaseFake.CarouselItems.Remove(carouselItem);
+                _eshopDbContext.CarouselItems.Remove(carouselItem);
+                _eshopDbContext.SaveChanges();
+
                 return RedirectToAction(nameof(Select));
             }
 
