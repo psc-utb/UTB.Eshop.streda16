@@ -1,5 +1,5 @@
 ﻿@model CarouselItem
-<form asp-action="@ViewBag.Akce" method="post">
+<form asp-action="@ViewBag.Akce" method="post" enctype="multipart/form-data">
     @{
         if (ViewBag.Akce == "Edit")
         { 
@@ -7,8 +7,8 @@
         }
     }
     <div class="form-group">
-        <label>Image Source</label>
-        <input asp-for="ImageSrc" class="form-control" placeholder="Enter Image Source">
+        <label>Image</label>
+        <input asp-for="Image" class="form-control-file">
     </div>
     <div class="form-group">
         <label>Image Alternative Text</label>

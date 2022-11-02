@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,6 +13,9 @@ namespace UTB.Eshop.Web.Models.Entities
     {
         [Key]
         public int ID { get; set; }
+
+        [NotMapped]
+        public IFormFile Image { get; set; }
 
         [Required]
         [StringLength(255)]
