@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using UTB.Eshop.Domain.Implementation.Validations;
 
 namespace UTB.Eshop.Web.Models.Entities
 {
@@ -15,11 +16,13 @@ namespace UTB.Eshop.Web.Models.Entities
         public int ID { get; set; }
 
         [NotMapped]
-        public IFormFile Image { get; set; }
+        [FileContent("image")]
+        public virtual IFormFile Image { get; set; }
 
         [Required]
         [StringLength(255)]
         public string ImageSrc { get; set; }
+
         public string ImageAlt { get; set; }
     }
 }

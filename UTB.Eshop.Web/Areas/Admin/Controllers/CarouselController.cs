@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UTB.Eshop.Domain.Abstraction;
 using UTB.Eshop.Web.Models.Database;
 using UTB.Eshop.Web.Models.Entities;
+using UTB.Eshop.Web.Models.ViewModels;
 
 namespace UTB.Eshop.Web.Areas.Admin.Controllers
 {
@@ -40,20 +41,21 @@ namespace UTB.Eshop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CarouselItem carouselItem)
+        public async Task<IActionResult> Create(CarouselItemImageRequired carouselItem)
         {
-            if (carouselItem.Image != null)
+            ModelState.Remove(nameof(CarouselItem.ImageSrc));
+            if (ModelState.IsValid)
             {
                 string contentType = "image";
                 long maxLength = 5_000_000;
-                if (_checkFileContent.CheckFileContent(carouselItem.Image, contentType)
-                    && _checkFileLenght.CheckFileLength(carouselItem.Image, maxLength))
+                if (_checkFileLenght.CheckFileLength(carouselItem.Image, maxLength))
                 {
                     _fileUpload.ContentType = contentType;
                     _fileUpload.FileLength = maxLength;
                     carouselItem.ImageSrc = await _fileUpload.FileUploadAsync(carouselItem.Image, Path.Combine("img", "carousel"));
 
-                    if (String.IsNullOrEmpty(carouselItem.ImageSrc) == false)
+                    ModelState.Clear();
+                    if (TryValidateModel(carouselItem))
                     {
                         _eshopDbContext.CarouselItems.Add(carouselItem);
                         _eshopDbContext.SaveChanges();
@@ -84,34 +86,39 @@ namespace UTB.Eshop.Web.Areas.Admin.Controllers
 
             if (carouselItem != null)
             {
-
-                if (carouselItemFromForm.Image != null)
+                ModelState.Remove(nameof(CarouselItem.ImageSrc));
+                if (ModelState.IsValid)
                 {
-                    string contentType = "image";
-                    long maxLength = 5_000_000;
-                    if (_checkFileContent.CheckFileContent(carouselItemFromForm.Image, contentType)
-                        && _checkFileLenght.CheckFileLength(carouselItemFromForm.Image, maxLength))
+                    if (carouselItemFromForm.Image != null)
                     {
-                        _fileUpload.ContentType = contentType;
-                        _fileUpload.FileLength = maxLength;
-                        carouselItemFromForm.ImageSrc = await _fileUpload.FileUploadAsync(carouselItemFromForm.Image, Path.Combine("img", "carousel"));
-
-                        if (String.IsNullOrEmpty(carouselItemFromForm.ImageSrc) == false)
+                        string contentType = "image";
+                        long maxLength = 5_000_000;
+                        if (_checkFileLenght.CheckFileLength(carouselItemFromForm.Image, maxLength))
                         {
-                            carouselItem.ImageSrc = carouselItemFromForm.ImageSrc;
+                            _fileUpload.ContentType = contentType;
+                            _fileUpload.FileLength = maxLength;
+                            carouselItemFromForm.ImageSrc = await _fileUpload.FileUploadAsync(carouselItemFromForm.Image, Path.Combine("img", "carousel"));
+
+                            ModelState.Clear();
+                            if (TryValidateModel(carouselItemFromForm))
+                            {
+                                carouselItem.ImageSrc = carouselItemFromForm.ImageSrc;
+                            }
+                            else
+                                return View(carouselItemFromForm);
                         }
                         else
                             return View(carouselItemFromForm);
                     }
-                    else
-                        return View(carouselItemFromForm);
+
+                    carouselItem.ImageAlt = carouselItemFromForm.ImageAlt;
+
+                    _eshopDbContext.SaveChanges();
+
+                    return RedirectToAction(nameof(Select));
                 }
 
-                carouselItem.ImageAlt = carouselItemFromForm.ImageAlt;
-                
-                _eshopDbContext.SaveChanges();
-
-                return RedirectToAction(nameof(Select));
+                return View(carouselItemFromForm);
             }
 
             return NotFound();
@@ -120,7 +127,7 @@ namespace UTB.Eshop.Web.Areas.Admin.Controllers
         public IActionResult Delete(int ID)
         {
             CarouselItem carouselItem = _eshopDbContext.CarouselItems.FirstOrDefault(carItem => carItem.ID == ID);
-        
+
             if (carouselItem != null)
             {
                 _eshopDbContext.CarouselItems.Remove(carouselItem);

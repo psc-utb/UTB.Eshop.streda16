@@ -2,17 +2,29 @@
 <form asp-action="@ViewBag.Akce" method="post" enctype="multipart/form-data">
     @{
         if (ViewBag.Akce == "Edit")
-        { 
+        {
             <input type="hidden" asp-for="ID" />
         }
     }
+    <div asp-validation-summary="All"></div>
     <div class="form-group">
         <label>Image</label>
-        <input asp-for="Image" class="form-control-file">
+        @{
+            if (ViewBag.Akce == "Edit")
+            {
+                <input asp-for="Image" class="form-control-file">
+            }
+            else
+            {
+                <input asp-for="Image" class="form-control-file" data-val="true" data-val-required="The Image field is required.">
+            }
+        }
+        <span asp-validation-for="Image" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label>Image Alternative Text</label>
         <input asp-for="ImageAlt" class="form-control" placeholder="Enter Image Alternative Text">
+        <span asp-validation-for="ImageAlt" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
