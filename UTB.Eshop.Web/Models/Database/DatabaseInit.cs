@@ -42,6 +42,57 @@ namespace UTB.Eshop.Web.Models.Database
             return carouselItems;
         }
 
+
+        public List<Product> CreateProducts()
+        {
+            List<Product> products = new List<Product>();
+
+
+            Product cs1 = new Product()
+            {
+                ID = 1,
+                Name = "Chleba",
+                Price = 100
+            };
+
+            Product cs2 = new Product()
+            {
+                ID = 2,
+                Name = "Máslo",
+                Price = 75
+            };
+
+            Product cs3 = new Product()
+            {
+                ID = 3,
+                Name = "Perlivě neperlivá voda",
+                Price = 40
+            };
+
+            Product cs4 = new Product()
+            {
+                ID = 4,
+                Name = "Tácek",
+                Price = 10
+            };
+
+            Product cs5 = new Product()
+            {
+                ID = 5,
+                Name = "Ubrousky",
+                Price = 50
+            };
+
+            products.Add(cs1);
+            products.Add(cs2);
+            products.Add(cs3);
+            products.Add(cs4);
+            products.Add(cs5);
+
+            return products;
+        }
+
+
         public List<Role> CreateRoles()
 
         {

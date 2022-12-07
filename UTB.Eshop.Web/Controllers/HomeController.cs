@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UTB.Eshop.Web.Models;
 using UTB.Eshop.Web.Models.Database;
 using UTB.Eshop.Web.Models.Entities;
+using UTB.Eshop.Web.Models.ViewModels;
 
 namespace UTB.Eshop.Web.Controllers
 {
@@ -24,7 +25,14 @@ namespace UTB.Eshop.Web.Controllers
         public IActionResult Index()
         {
             List<CarouselItem> carouselItems = _eshopDbContext.CarouselItems.ToList();
-            return View(carouselItems);
+            List<Product> products = _eshopDbContext.Products.ToList();
+
+            HomeIndexViewModel hiVM = new HomeIndexViewModel()
+            {
+                CarouselItems = carouselItems,
+                Products = products
+            };
+            return View(hiVM);
         }
 
         public IActionResult Privacy()

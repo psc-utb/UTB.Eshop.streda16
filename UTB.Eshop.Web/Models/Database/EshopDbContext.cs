@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UTB.Eshop.Web.Models.Database.Configuration;
 using UTB.Eshop.Web.Models.Entities;
 using UTB.Eshop.Web.Models.Identity;
 
@@ -13,6 +14,10 @@ namespace UTB.Eshop.Web.Models.Database
     public class EshopDbContext : IdentityDbContext<User, Role, int>
     {
         public DbSet<CarouselItem> CarouselItems { get; set; }
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         public EshopDbContext(DbContextOptions options) : base(options)
         {
@@ -30,6 +35,7 @@ namespace UTB.Eshop.Web.Models.Database
 
             DatabaseInit dbInit = new DatabaseInit();
             builder.Entity<CarouselItem>().HasData(dbInit.CreateCarouselItems());
+            builder.Entity<Product>().HasData(dbInit.CreateProducts());
             builder.Entity<Role>().HasData(dbInit.CreateRoles());
 
             (User admin, List<IdentityUserRole<int>> adminRole) = dbInit.CreateAdminWithRoles();
@@ -38,6 +44,8 @@ namespace UTB.Eshop.Web.Models.Database
             builder.Entity<User>().HasData(admin, manager);
             builder.Entity<IdentityUserRole<int>>().HasData(adminRole);
             builder.Entity<IdentityUserRole<int>>().HasData(managerRole);
+
+            builder.ApplyConfiguration<Order>(new OrderConfiguration());
         }
     }
 }
